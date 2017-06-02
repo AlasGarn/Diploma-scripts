@@ -1,0 +1,56 @@
+# run with gnuplot -e "filename='fes.dat'; a = 1; b = 2; c = 3" ~/my_scripts/plot_contour.plg
+#set cntrparam levels incr 0.0,2.0,100.0
+set term qt size 1024, 1024
+#set term png size 1024, 1024 enhanced
+#set output "out.png"
+set hidden3d
+set view map 
+set pm3d interpolate 25,25
+set multiplot
+
+
+set lmargin at screen 0.05
+set rmargin at screen 0.85
+set bmargin at screen 0.15
+set tmargin at screen 0.85
+
+
+set title "Free Energy Surface of binding of\n".filename." and XOP" font ",35" offset 0,2
+set size square
+#set xrange [8.:10.5]
+set xlabel "X, (nm)" font ",30" offset 0,-2
+set xtics font ",20"
+#set yrange [2.5:5]
+set ylabel "Y, (nm)"  font ",30"
+set ytics font ",20"
+
+set cbrange [0:60]
+set cbtics autofreq 5 font ",20"
+set cblabel "Energy kJ/mol"  font ",30" offset 6
+
+unset key
+set palette rgbformulae 33,13,10
+set palette maxcolors 12
+#21,22,23
+sp filename u a:b:c w pm3d 
+unset surface 
+set contour base
+set cntrlabel onecolor
+
+set cntrparam cubicspline
+set cntrparam points 2
+set cntrparam levels incremental 0, 5, 60
+
+set linetype 1 lc rgb "black" lw 1.5 pt 1
+set cntrlabel format '%8.2f' font ',15' start 5 interval -1
+
+#sp filename u ($3<=65?$1:1/0):($3<=65?$2:1/0):3 w l
+sp filename u a:b:c w l
+
+set cntrparam levels incremental 0, 5, 60
+set linetype 1 lc rgb "black" lw 1 pt 1
+#sp filename u ($3<=50?$1:1/0):($3<=50?$2:1/0):3 w labels 
+
+unset multiplot
+pause -1
+

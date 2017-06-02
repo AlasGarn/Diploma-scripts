@@ -1,0 +1,68 @@
+# run with gnuplot -e "filename='fes.dat'; a = 1; b = 2; c = 3" ~/my_scripts/plot_contour.plg
+# or 
+# 
+#set cntrparam levels incr 0.0,2.0,100.0
+#set term x11 size 1920, 1024
+set term png size 1024, 1024 enhanced
+set output filename[0:13].".png"
+set hidden3d
+set view map 
+set pm3d interpolate 25,25
+set multiplot
+
+
+res=filename[10:13]
+#res=filename[9:12]
+set size square
+
+x1 = .75 
+x2 = 1.25
+y1 = 140
+y2 = 180
+
+set linetype 1 lc rgb "black" lw 1.5 pt 1
+set cntrlabel format '%8.2f' font ',15' start 5 interval -1
+
+set arrow from x1,y1 to x2,y1 nohead lc rgb "black" lw 6 
+set arrow from x2,y1 to x2,y2 nohead lc rgb "black" lw 6
+set arrow from x2,y2 to x1,y2 nohead lc rgb "black" lw 6
+set arrow from x1,y2 to x1,y1 nohead lc rgb "black" lw 6
+set xrange [x1:x2]
+#set xrange [8.25:10.25]
+unset xlabel
+unset xtics 
+set yrange [y1:y2]
+#set yrange [3:5]
+unset ylabel 
+unset ytics
+
+set cbrange [0:60]
+unset cbtics 
+unset cblabel 
+unset colorbox
+
+unset key
+set palette rgbformulae 33,13,10
+set palette maxcolors 12
+#21,22,23
+sp filename u a:($2*57.3):c w pm3d 
+unset surface 
+set contour base
+set cntrlabel onecolor
+
+set cntrparam cubicspline
+set cntrparam points 2
+set cntrparam levels incremental 0, 5, 60
+
+
+#sp filename u ($3<=65?$1:1/0):($3<=65?$2:1/0):3 w l
+sp filename u a:($2*57.3):c w l
+
+set cntrparam levels incremental 0, 5, 60
+set linetype 1 lc rgb "black" lw 1 pt 1
+#sp filename u ($3<=50?$1:1/0):($3<=50?$2:1/0):3 w labels 
+
+
+unset multiplot
+#pause -1
+

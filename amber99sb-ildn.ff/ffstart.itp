@@ -1,0 +1,7 @@
+; topolbuild version 1.3
+; Command line:
+;     topolbuild -dir /home/anur/progs/amber11/ -ff gaff -n start -r RES
+;
+
+;#include "ffstartnb.itp"
+;#include "ffusernb.itp"

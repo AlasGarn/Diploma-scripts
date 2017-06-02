@@ -1,0 +1,10 @@
+set term png
+# size 1920, 1024
+set output "out.png"
+
+set xtics
+set xrange [0.025:0.175]
+#set ytics 5
+set grid
+
+plot filename u 1:2 w l

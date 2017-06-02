@@ -1,0 +1,31 @@
+#!/bin/sh
+
+[ x"$TMPDIR" == x"" ] && TMPDIR=/tmp
+HOSTFILE=${TMPDIR}/hostfile.${SLURM_JOB_ID}
+srun hostname -s|sort|uniq -c|awk '{print $2}' > $HOSTFILE || { rm -f $HOSTFILE; exit 255; }
+
+CORES=14
+pr=0
+for task in `find . -name "do_qm.bash"`;
+do
+	if [ $pr -eq 0 ];
+	then
+		pr=$CORES
+    		host=`head -n 1 $HOSTFILE`
+		sed -i "1 d" $HOSTFILE  # delete a node from the list once it is used
+	fi
+
+        
+	cd `dirname $task`
+	#touch test
+        srun --ntasks 1 --exclusive -w $host do_qm.bash &
+        cd ..
+	((pr--))	
+done
+
+
+rc=$?
+rm -f $HOSTFILE
+wait
+exit $rc
+
